@@ -7,13 +7,15 @@ class Servicio(ABC):
         self.costo_base = costo_base
 
     @abstractmethod
-    def calcular_costos(self):
+    def calcular_costo(self):
         pass
 
     @abstractmethod
-    def describir_servicios(self):
+    def describir_servicio(self):
         pass
 
     @abstractmethod
-    def validar_parametros(self):
+    def validar_parametro(self):
         pass
+
+    
