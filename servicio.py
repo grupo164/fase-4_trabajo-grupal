@@ -14,15 +14,25 @@ class Servicio(ABC, EntidadSistema):
     @abstractmethod
     def calcular_costo(self, duracion):
         pass
-
-    # Método abstracto para describir el servicio
+ 
+    # Método abstracto para describir el servicio específico en cada subclase
     @abstractmethod
     def describir_servicio(self):
         pass
-
-    # Método abstracto para validar parámetros del servicio
+ 
+    # Método abstracto para validar los parámetros de entrada necesarios
     @abstractmethod
-    def validar_parametro(self):
+    def validar_parametros(self, **kwargs):
+        pass
+ 
+    # Método abstracto para mostrar detalles completos del servicio
+    @abstractmethod
+    def mostrar_detalles(self):
+        pass
+ 
+    # Método abstracto para validar el registro del servicio antes de su uso
+    @abstractmethod
+    def validar_registro(self):
         pass
 
     # Método para calcular el costo del servicio con impuesto
