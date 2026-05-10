@@ -1,5 +1,5 @@
-# Importar la clase base Servicio
-from servicio import Servicio
+# Importar la clase base Servicio y excepciones personalizadas
+from servicio import Servicio, ServicioError, ParametroInvalidoError
 
 
 # Clase para gestionar reservas de salas
@@ -23,18 +23,24 @@ class ReservaSala(Servicio):
         return f"SERVICIO: {self.nombre_entidad} | Tipo: Reserva de Sala | Capacidad: {self._capacidad_max} personas"
 
     def validar_registro(self):
-        # Validar que los datos de la sala sean válidos
-        if not self.nombre_entidad or self.costo_base <= 0 or self._capacidad_max <= 0:
-            raise ValueError("Datos de la sala inválidos.")
+        # Validar que los datos de la sala sean válidos con encadenamiento de excepciones
+        try:
+            if not self.nombre_entidad or self.costo_base <= 0 or self._capacidad_max <= 0:
+                raise ValueError("Datos de la sala inválidos.")
+        except ValueError as e:
+            raise ServicioError("Error al validar registro de sala.") from e
 
     def validar_parametros(self, **kwargs):
         # Validar la duración y número de asistentes
-        duracion = kwargs.get("duracion")
-        if duracion is None or duracion <= 0:
-            raise ValueError("La duración debe ser mayor a 0.")
-        num_asistentes = kwargs.get("num_asistentes")
-        if num_asistentes is not None and num_asistentes > self._capacidad_max:
-            raise ValueError(f"Los asistentes ({num_asistentes}) superan la capacidad máxima ({self._capacidad_max}).")
+        try:
+            duracion = kwargs.get("duracion")
+            if duracion is None or duracion <= 0:
+                raise ValueError("La duración debe ser mayor a 0.")
+            num_asistentes = kwargs.get("num_asistentes")
+            if num_asistentes is not None and num_asistentes > self._capacidad_max:
+                raise ValueError(f"Los asistentes ({num_asistentes}) superan la capacidad máxima ({self._capacidad_max}).")
+        except ValueError as e:
+            raise ParametroInvalidoError("Error en parámetros de sala.") from e
         return True
 
 
@@ -60,18 +66,24 @@ class AlquilerEquipo(Servicio):
         return f"SERVICIO: {self.nombre_entidad} | Tipo: Alquiler de Equipo | Stock: {self._cantidad_disponible}"
 
     def validar_registro(self):
-        # Validar que los datos del equipo sean válidos
-        if not self.nombre_entidad or self.costo_base <= 0 or not self._tipo_equipo:
-            raise ValueError("Datos del equipo inválidos.")
+        # Validar que los datos del equipo sean válidos con encadenamiento de excepciones
+        try:
+            if not self.nombre_entidad or self.costo_base <= 0 or not self._tipo_equipo:
+                raise ValueError("Datos del equipo inválidos.")
+        except ValueError as e:
+            raise ServicioError("Error al validar registro de equipo.") from e
 
     def validar_parametros(self, **kwargs):
         # Validar la duración y cantidad solicitada
-        duracion = kwargs.get("duracion")
-        if duracion is None or duracion <= 0:
-            raise ValueError("La duración debe ser mayor a 0.")
-        cantidad = kwargs.get("cantidad", 1)
-        if cantidad > self._cantidad_disponible:
-            raise ValueError(f"Cantidad solicitada ({cantidad}) supera el stock disponible ({self._cantidad_disponible}).")
+        try:
+            duracion = kwargs.get("duracion")
+            if duracion is None or duracion <= 0:
+                raise ValueError("La duración debe ser mayor a 0.")
+            cantidad = kwargs.get("cantidad", 1)
+            if cantidad > self._cantidad_disponible:
+                raise ValueError(f"Cantidad solicitada ({cantidad}) supera el stock disponible ({self._cantidad_disponible}).")
+        except ValueError as e:
+            raise ParametroInvalidoError("Error en parámetros de equipo.") from e
         return True
 
 
@@ -101,13 +113,19 @@ class AsesoriaEspecializada(Servicio):
         return f"SERVICIO: {self.nombre_entidad} | Tipo: Asesoría Especializada | Área: {self._area} | Nivel: {self._nivel_experto}"
 
     def validar_registro(self):
-        # Validar que los datos de la asesoría sean válidos
-        if not self.nombre_entidad or self.costo_base <= 0 or not self._area or self._nivel_experto not in self.MULTIPLICADORES:
-            raise ValueError("Datos de la asesoría inválidos.")
+        # Validar que los datos de la asesoría sean válidos con encadenamiento de excepciones
+        try:
+            if not self.nombre_entidad or self.costo_base <= 0 or not self._area or self._nivel_experto not in self.MULTIPLICADORES:
+                raise ValueError("Datos de la asesoría inválidos.")
+        except ValueError as e:
+            raise ServicioError("Error al validar registro de asesoría.") from e
 
     def validar_parametros(self, **kwargs):
         # Validar duración mínima de la asesoría
-        duracion = kwargs.get("duracion")
-        if duracion is None or duracion < 0.5:
-            raise ValueError("La duración mínima para una asesoría es 0.5 horas.")
+        try:
+            duracion = kwargs.get("duracion")
+            if duracion is None or duracion < 0.5:
+                raise ValueError("La duración mínima para una asesoría es 0.5 horas.")
+        except ValueError as e:
+            raise ParametroInvalidoError("Error en parámetros de asesoría.") from e
         return True
