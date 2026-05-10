@@ -8,6 +8,9 @@ from servicios_especializados import ReservaSala, AlquilerEquipo, AsesoriaEspeci
 # Importamos el logger para registrar eventos y errores
 from logger import registrar_evento, registrar_error, registrar_advertencia
 
+# Importamos las excepciones personalizadas
+from servicio import ServicioError, ParametroInvalidoError
+
 # Intentamos importar el servicio del compañero (si ya corrigió los errores)
 try:
     from servicio import Servicio
@@ -18,7 +21,7 @@ except:
 
 def simulacion_fj():
     print("========== SOFTWARE FJ: SISTEMA DE GESTIÓN ==========")
-    
+
     # PRUEBA 1: Crear un cliente correcto
     try:
         usuario1 = Cliente("Katerin Navas", "12345", "katerin@ejemplo.com")
@@ -42,54 +45,58 @@ def simulacion_fj():
     except Exception as e:
         print(f"Error al procesar reserva: {e}")
 
-    # PRUEBA 4: Crear una sala válida
+    # PRUEBA 4: Crear una sala válida (try/except/else)
     try:
         print("\nCreando servicio de sala...")
         sala = ReservaSala("Sala Júpiter", 50000, 20)
         sala.validar_registro()
-        print(sala.describir_servicio())
-        registrar_evento(f"Servicio creado: {sala.mostrar_detalles()}")
-    except Exception as e:
+    except ServicioError as e:
         registrar_error(e, "Crear ReservaSala")
         print(f"Error al crear sala: {e}")
+    else:
+        print(sala.describir_servicio())
+        registrar_evento(f"Servicio creado: {sala.mostrar_detalles()}")
 
     # PRUEBA 5: Crear una sala con datos inválidos
     try:
         print("\nProbando sala con capacidad inválida...")
         sala_error = ReservaSala("Sala Error", 50000, -5)
         sala_error.validar_registro()
-    except ValueError as e:
+    except ServicioError as e:
         registrar_error(e, "Crear ReservaSala inválida")
         print(f"Éxito: El sistema bloqueó la sala inválida: {e}")
 
-    # PRUEBA 6: Crear un equipo válido
+    # PRUEBA 6: Crear un equipo válido (try/except/else)
     try:
         print("\nCreando servicio de alquiler de equipo...")
         equipo = AlquilerEquipo("Laptop Dell", 30000, "Laptop", 5)
         equipo.validar_registro()
-        print(equipo.describir_servicio())
-        registrar_evento(f"Servicio creado: {equipo.mostrar_detalles()}")
-    except Exception as e:
+    except ServicioError as e:
         registrar_error(e, "Crear AlquilerEquipo")
         print(f"Error al crear equipo: {e}")
+    else:
+        print(equipo.describir_servicio())
+        registrar_evento(f"Servicio creado: {equipo.mostrar_detalles()}")
 
-    # PRUEBA 7: Crear una asesoría válida
+    # PRUEBA 7: Crear una asesoría válida (try/except/finally)
     try:
         print("\nCreando servicio de asesoría especializada...")
         asesoria = AsesoriaEspecializada("Consultoría IA", 80000, "Inteligencia Artificial", "senior")
         asesoria.validar_registro()
         print(asesoria.describir_servicio())
         registrar_evento(f"Servicio creado: {asesoria.mostrar_detalles()}")
-    except Exception as e:
+    except ServicioError as e:
         registrar_error(e, "Crear AsesoriaEspecializada")
         print(f"Error al crear asesoría: {e}")
+    finally:
+        print("Validación de asesoría finalizada.")
 
     # PRUEBA 8: Crear asesoría con nivel inválido
     try:
         print("\nProbando asesoría con nivel inválido...")
         asesoria_error = AsesoriaEspecializada("Consultoría Error", 80000, "Física", "dios")
         asesoria_error.validar_registro()
-    except ValueError as e:
+    except ServicioError as e:
         registrar_error(e, "Crear AsesoriaEspecializada inválida")
         print(f"Éxito: El sistema bloqueó la asesoría inválida: {e}")
 
@@ -102,16 +109,19 @@ def simulacion_fj():
         registrar_error(e, "Reserva con duración inválida")
         print(f"Éxito: El sistema bloqueó la reserva inválida: {e}")
 
-    # PRUEBA 10: Calcular costo completo con descuento e impuesto
+    # PRUEBA 10: Calcular costo completo con descuento e impuesto (try/except/else/finally)
     try:
         print("\nCalculando costo completo de asesoría...")
         desglose = asesoria.calcular_costo_completo(2, tasa_impuesto=0.19, descuento=0.10)
-        for clave, valor in desglose.items():
-            print(f"  {clave}: {valor:,.0f}" if isinstance(valor, float) else f"  {clave}: {valor}")
-        registrar_evento(f"Costo completo calculado: {desglose['servicio']} | Total: ${desglose['total']:,.0f}")
     except Exception as e:
         registrar_error(e, "Calcular costo completo")
         print(f"Error al calcular costo: {e}")
+    else:
+        for clave, valor in desglose.items():
+            print(f"  {clave}: {valor:,.0f}" if isinstance(valor, float) else f"  {clave}: {valor}")
+        registrar_evento(f"Costo completo calculado: {desglose['servicio']} | Total: ${desglose['total']:,.0f}")
+    finally:
+        print("Cálculo de costo finalizado.")
 
     print("\n================ SIMULACIÓN FINALIZADA ================")
 
