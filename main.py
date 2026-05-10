@@ -22,21 +22,27 @@ except:
 def simulacion_fj():
     print("========== SOFTWARE FJ: SISTEMA DE GESTIÓN ==========")
 
-    # PRUEBA 1: Crear un cliente correcto
+    # PRUEBA 1: Crear un cliente correcto (try/except/else)
     try:
         usuario1 = Cliente("Katerin Navas", "12345", "katerin@ejemplo.com")
-        print(f"Carga exitosa: {usuario1.mostrar_detalles()}")
     except Exception as e:
+        registrar_error(e, "Crear cliente válido")
         print(f"Fallo en prueba 1: {e}")
+    else:
+        print(f"Carga exitosa: {usuario1.mostrar_detalles()}")
+        registrar_evento(f"Cliente creado: {usuario1.mostrar_detalles()}")
 
-    # PRUEBA 2: Forzar error de validación (dejar ID vacío)
+    # PRUEBA 2: Forzar error de validación (try/except/else)
     try:
         print("\nProbando validación robusta (ID vacío)...")
         usuario_error = Cliente("Diego", "", "diego@ejemplo.com")
     except ValueError as e:
+        registrar_error(e, "Crear cliente con ID vacío")
         print(f"Éxito: El sistema bloqueó el registro vacío: {e}")
+    else:
+        print("Cliente creado sin errores.")
 
-    # PRUEBA 3: Realizar una reserva
+    # PRUEBA 3: Realizar una reserva (try/except/finally)
     try:
         print("\nProcesando reserva de servicio...")
         mi_servicio = Servicio("Mantenimiento de Software")
@@ -44,6 +50,8 @@ def simulacion_fj():
         reserva1.procesar_confirmacion()
     except Exception as e:
         print(f"Error al procesar reserva: {e}")
+    finally:
+        print("Intento de reserva finalizado.")
 
     # PRUEBA 4: Crear una sala válida (try/except/else)
     try:
@@ -57,7 +65,7 @@ def simulacion_fj():
         print(sala.describir_servicio())
         registrar_evento(f"Servicio creado: {sala.mostrar_detalles()}")
 
-    # PRUEBA 5: Crear una sala con datos inválidos
+    # PRUEBA 5: Crear una sala con datos inválidos (try/except/finally)
     try:
         print("\nProbando sala con capacidad inválida...")
         sala_error = ReservaSala("Sala Error", 50000, -5)
@@ -65,6 +73,8 @@ def simulacion_fj():
     except ServicioError as e:
         registrar_error(e, "Crear ReservaSala inválida")
         print(f"Éxito: El sistema bloqueó la sala inválida: {e}")
+    finally:
+        print("Validación de sala finalizada.")
 
     # PRUEBA 6: Crear un equipo válido (try/except/else)
     try:
@@ -81,7 +91,7 @@ def simulacion_fj():
     # PRUEBA 7: Crear una asesoría válida (try/except/finally)
     try:
         print("\nCreando servicio de asesoría especializada...")
-        asesoria = AsesoriaEspecializada("Consultoría IA", 80000, "Inteligencia Artificial", "senior")
+        asesoria = AsesoriaEspecializada("Consultoría Legal", 80000, "Derecho Empresarial", "senior")
         asesoria.validar_registro()
         print(asesoria.describir_servicio())
         registrar_evento(f"Servicio creado: {asesoria.mostrar_detalles()}")
@@ -91,16 +101,18 @@ def simulacion_fj():
     finally:
         print("Validación de asesoría finalizada.")
 
-    # PRUEBA 8: Crear asesoría con nivel inválido
+    # PRUEBA 8: Crear asesoría con nivel inválido (try/except/else)
     try:
         print("\nProbando asesoría con nivel inválido...")
-        asesoria_error = AsesoriaEspecializada("Consultoría Error", 80000, "Física", "dios")
+        asesoria_error = AsesoriaEspecializada("Consultoría Error", 80000, "Contabilidad", "dios")
         asesoria_error.validar_registro()
     except ServicioError as e:
         registrar_error(e, "Crear AsesoriaEspecializada inválida")
         print(f"Éxito: El sistema bloqueó la asesoría inválida: {e}")
+    else:
+        print("Asesoría creada sin errores.")
 
-    # PRUEBA 9: Realizar una reserva con duración inválida
+    # PRUEBA 9: Realizar una reserva con duración inválida (try/except/else/finally)
     try:
         print("\nProcesando reserva con duración inválida...")
         reserva2 = Reserva(usuario1, equipo, -2)
@@ -108,6 +120,10 @@ def simulacion_fj():
     except ValueError as e:
         registrar_error(e, "Reserva con duración inválida")
         print(f"Éxito: El sistema bloqueó la reserva inválida: {e}")
+    else:
+        print("Reserva procesada sin errores.")
+    finally:
+        print("Intento de reserva finalizado.")
 
     # PRUEBA 10: Calcular costo completo con descuento e impuesto (try/except/else/finally)
     try:

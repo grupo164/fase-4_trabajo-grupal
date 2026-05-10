@@ -1,0 +1,7 @@
+2026-05-10 08:21:24 | INFO | Servicio creado: SERVICIO: Sala Júpiter | Tipo: Reserva de Sala | Capacidad: 20 personas
+2026-05-10 08:21:24 | ERROR | [Crear ReservaSala inválida] ServicioError: Error al validar registro de sala.
+2026-05-10 08:21:24 | INFO | Servicio creado: SERVICIO: Laptop Dell | Tipo: Alquiler de Equipo | Stock: 5
+2026-05-10 08:21:24 | INFO | Servicio creado: SERVICIO: Consultoría IA | Tipo: Asesoría Especializada | Área: Inteligencia Artificial | Nivel: senior
+2026-05-10 08:21:24 | ERROR | [Crear AsesoriaEspecializada inválida] ServicioError: Error al validar registro de asesoría.
+2026-05-10 08:21:24 | ERROR | [Reserva con duración inválida] ValueError: La duración de la reserva debe ser mayor a 0 horas.
+2026-05-10 08:21:24 | INFO | Costo completo calculado: Consultoría IA | Total: $257,040
