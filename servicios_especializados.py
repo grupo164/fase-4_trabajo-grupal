@@ -52,3 +52,17 @@ class AlquilerEquipo(Servicio):
         if cantidad > self._cantidad_disponible:
             raise ValueError(f"Cantidad solicitada ({cantidad}) supera el stock disponible ({self._cantidad_disponible}).")
         return True
+
+class AsesoriaEspecializada(Servicio):
+
+    MULTIPLICADORES = {"junior": 1.0, "senior": 1.5, "principal": 2.0}
+
+    def __init__(self, nombre, costo_base, area, nivel_experto):
+        super().__init__(nombre, costo_base)
+        self.area = area
+        self.nivel_experto = nivel_experto
+
+    def calcular_costo(self, duracion):
+        return round(self.costo_base * duracion * self._multiplicador, 2)
+
+    
