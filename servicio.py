@@ -2,6 +2,16 @@
 from abc import abstractmethod
 from entidades_base import EntidadSistema
 
+# Excepciones personalizadas del sistema
+class ServicioError(Exception):
+    pass
+
+class CostoInvalidoError(ServicioError):
+    pass
+
+class ParametroInvalidoError(ServicioError):
+    pass
+
 # Clase abstracta que define la interfaz para los servicios
 class Servicio(EntidadSistema):
 
