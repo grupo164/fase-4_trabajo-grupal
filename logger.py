@@ -11,3 +11,15 @@ logging.basicConfig(
 )
  
 logger = logging.getLogger("SoftwareFJ")
+
+def registrar_evento(mensaje):
+    logger.info(mensaje)
+ 
+def registrar_error(excepcion, contexto=""):
+    if contexto:
+        logger.error(f"[{contexto}] {type(excepcion).__name__}: {excepcion}")
+    else:
+        logger.error(f"{type(excepcion).__name__}: {excepcion}")
+ 
+def registrar_advertencia(mensaje):
+    logger.warning(mensaje)
